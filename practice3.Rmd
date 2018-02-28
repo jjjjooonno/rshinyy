@@ -1,0 +1,56 @@
+---
+title: "공시지가 / 실거래가"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: fill
+runtime : shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(readxl)
+library(ggplot2)
+gong<- read_excel('gb_gong.xlsx')
+sil<- read_excel('gb_sil.xlsx')
+```
+
+Sidebar {.sidebar}
+=======================================================================
+### 변수선택
+```{r}
+actionButton('go','그래프 보기')
+selectInput('year','연도 선택',c(2013,2014,2015,2016))
+sliderInput('range','가격범위 선택',0,2000000,value = c(0,2000000))
+radioButtons('data','가격구분',
+                     c('공시지가' = 'gong',
+                       '실거래가' = 'sil'))
+```
+
+Column {data-width=350}
+=======================================================================
+
+
+### 막대그래프
+
+```{r}
+dtt<- eventReactive(input$go,{
+  if (input$data == 'gong'){
+    dt<- gong
+    }else{
+      dt<- sil
+      colnames(dt)<- c('year','newaddress','price')
+      }
+  dt1<- dt[dt$year == input$year,]
+  dt2<- dt1[dt1$price <= input$range[2],]
+  dt3<- dt2[dt2$price >= input$range[1],]
+  return(dt3)
+  })
+output$bar1<- renderPlot({
+  ggplot(dtt(),aes(x = newaddress, y = price))+ # family = 'AppleGothic')+
+    geom_bar(stat = 'identity')+
+    coord_flip()
+  })
+plotOutput("bar1")
+```
+

@@ -1,0 +1,5 @@
+devtools::install_github("cardiomoon/Kormaps2014")
+install.packages('ggmap')
+library(ggmap)
+data <- read.csv('newfile.csv', fileEncoding = 'euc-kr')
+cent<- c(mean(dt$longitude),mean(dt$latitude))

@@ -1,0 +1,12 @@
+name: public
+title: public
+username:
+account: jjjjooonno
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 279322
+bundleId: 1218753
+url: https://jjjjooonno.shinyapps.io/public/
+when: 1518423688.85842
+asMultiple: FALSE
+asStatic: FALSE
